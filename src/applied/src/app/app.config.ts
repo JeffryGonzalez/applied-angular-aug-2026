@@ -1,0 +1,29 @@
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  provideRouter,
+  withComponentInputBinding,
+  withExperimentalAutoCleanupInjectors,
+} from '@angular/router';
+
+import { routes } from './app.routes';
+// Todo: This is "ganky" - needs venues/bundling
+import { SessionSettings } from './labs/the-setting-two-pages-share/session-settings';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // this is saying that this service can be injected anywhere in the entire application.
+    // despite the angular docs, it is not a "singleton", and neither is "injectable({providedIn: root})"
+    SessionSettings,
+    provideBrowserGlobalErrorListeners(),
+    provideRouter(
+      routes,
+      // A route's providers outlive the route without this. See
+      // venues/angular-22.md.
+      // this says if you leave a ROUTE that provides a service, it is thrown away, and a new one
+      // is created if you return - When is that a good idea? SERVICES THAT HOLD A TON OF DATA.
+      withExperimentalAutoCleanupInjectors(),
+      // Route and query parameters arrive as component inputs.
+      withComponentInputBinding(),
+    ),
+  ],
+};

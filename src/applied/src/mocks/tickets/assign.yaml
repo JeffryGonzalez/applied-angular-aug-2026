@@ -1,0 +1,23 @@
+endpoint: /api/tickets/:id/assignee
+method: PUT
+shape: command
+description: Assigns a ticket to an agent. The write in the-write-that-failed-later.
+
+context:
+  sourceHints:
+    - src/app/labs/the-write-that-failed-later/
+  hints:
+    - 'typical is deliberately not instant — 400ms is enough to see a spinner and not enough to leave.'
+    - 'fails-late is the teaching scenario: 2.5 seconds, then a 409. Long enough that a student navigates away before it lands, which is the entire lab.'
+    - 'A 409 is a refusal, not an outage. The agent is at capacity. Retrying unchanged will fail again.'
+
+scenarios:
+  typical:
+    description: Succeeds after 400ms. Fast enough to feel fine, slow enough to see.
+    active: true
+  slow:
+    description: Succeeds after 2.5s. Shows what a pessimistic UI costs when the network is bad.
+  fails:
+    description: 409 after 400ms. The failure arrives while the user is still looking.
+  fails-late:
+    description: 409 after 2.5s. The failure arrives after the user has moved on, and there is nowhere to put it.

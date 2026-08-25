@@ -1,0 +1,33 @@
+endpoint: /api/tickets
+method: GET
+shape: collection
+description: The ticket queue. Feeds the list in the-response-that-lied and the-shape-you-render.
+
+responseType:
+  name: TicketFromApi
+  path: src/app/labs/the-response-that-lied/wire.ts
+
+context:
+  sourceHints:
+    - src/app/labs/the-response-that-lied/wire.ts
+    - src/app/labs/the-response-that-lied/tickets-api.ts
+  hints:
+    - 'The documented shape and the real shape differ. DocumentedTicket in wire.ts is what the docs promise; TicketFromApi is what arrives.'
+    - 'The lying scenario is the teaching payload — null subject, unix-millisecond date on one row, an undocumented status, a missing priority, and assignedTo as either an id or an object.'
+    - 'TicketsApi.load() is the only place allowed to believe the network. Everything downstream sees parsed data.'
+
+scenarios:
+  typical:
+    description: Every field present and the documented type is true. The app works and nothing is learned.
+    active: true
+  lying:
+    description: What the endpoint actually returns in production. Same code, five rows, four different ways of being surprising.
+  empty:
+    description: No tickets. Verifies whether an empty state exists — it does not, yet.
+  slow:
+    description: Two second delay. Verifies whether anything is shown while waiting — nothing is.
+    delay: '2000'
+  error:
+    description: 500 from the server. Verifies the component says something rather than rendering an empty table.
+  missing:
+    description: 404. A different failure with the same shape — worth checking they are not handled identically when they should not be.
