@@ -1,6 +1,6 @@
 import { Component, computed, DOCUMENT, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { SessionSettings } from './session-settings';
+import { SessionSettings } from '../../areas/shared/data-session/session-settings';
 
 @Component({
   selector: 'app-timer',

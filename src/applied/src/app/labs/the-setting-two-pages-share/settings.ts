@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { SessionSettings } from './session-settings';
+import { SessionSettings } from '../../areas/shared/data-session/session-settings';
 
 @Component({
   selector: 'app-settings',
   imports: [RouterLink],
+  providers: [],
   template: `
     <div class="card bg-base-100 w-96 shadow-sm">
       <div class="card-body">
