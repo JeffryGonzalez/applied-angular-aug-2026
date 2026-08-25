@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, DOCUMENT, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SessionSettings } from './session-settings';
 
@@ -19,7 +19,7 @@ import { SessionSettings } from './session-settings';
           <button class="btn btn-ghost" (click)="reset()">Reset</button>
         </div>
 
-        <a class="link link-hover text-sm" routerLink="settings">Settings</a>
+        <a class="link link-hover text-sm" routerLink="settings" id="btn-settings">Settings</a>
       </div>
     </div>
   `,
@@ -30,6 +30,8 @@ export class Timer {
 
   private readonly remaining = signal(this.settings.sessionMinutes() * 60);
   protected readonly running = signal(false);
+
+  private documentEnv = inject(DOCUMENT);
 
   protected readonly display = computed(() => {
     const total = this.remaining();
@@ -51,6 +53,8 @@ export class Timer {
   }
 
   protected toggle() {
+    const settingsButton = this.documentEnv.getElementById('btn-settings') as HTMLButtonElement;
+    settingsButton.classList.add('btn-error');
     this.running.update((r) => !r);
   }
 
