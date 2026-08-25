@@ -6,9 +6,15 @@ import {
 } from '@angular/router';
 
 import { routes } from './app.routes';
+import { ENV_DESCRIPTOR, getCurrentEnvDescriptor, SUPER_LOGGER } from './services/custom';
+import { provideLogging, withDate, withPrefix } from './services/custom-factory';
 
+// https://angular.dev/guide/di/defining-dependency-providers#injector-hierarchy-in-angular
 export const appConfig: ApplicationConfig = {
   providers: [
+    { provide: SUPER_LOGGER, useValue: (x: string) => console.log(x) },
+    provideLogging(withPrefix('App'), withDate()),
+    { provide: ENV_DESCRIPTOR, useFactory: getCurrentEnvDescriptor },
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       routes,
