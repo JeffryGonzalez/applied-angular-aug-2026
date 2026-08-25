@@ -2,10 +2,14 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { routes } from './app.routes';
 import { ENV_DESCRIPTOR, SUPER_LOGGER } from './services/custom';
-
+import { Settings } from './services/settings';
+import { Baby } from './baby';
+import { isDevMode } from '@angular/core';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, Baby],
+  providers: [Settings],
+
   template: `
     <div class="min-h-screen bg-base-200">
       <div class="navbar bg-base-100 shadow-sm">
@@ -19,6 +23,9 @@ import { ENV_DESCRIPTOR, SUPER_LOGGER } from './services/custom';
         </ul>
       </div>
       <main class="p-6">
+        <app-baby />
+        <p>{{ dev }}</p>
+
         <router-outlet />
       </main>
     </div>
@@ -28,6 +35,8 @@ import { ENV_DESCRIPTOR, SUPER_LOGGER } from './services/custom';
 export class App {
   // Nav is generated from the route table so adding a lab is a one-line change
   // in app.routes.ts. See venues/internal/labs.md.
+  dev = isDevMode();
+  protected readonly settings = inject(Settings);
   protected readonly logger = inject(SUPER_LOGGER);
   protected readonly envDescriptor = inject(ENV_DESCRIPTOR);
   protected readonly labs = routes

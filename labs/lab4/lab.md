@@ -1,4 +1,6 @@
 # The link you can send someone
+**This is the arguably most important thing that people mess up in state management. THE URL IS ALWAY THE MOST AUTHORITATIVE SOURCE OF STATE**
+*
 
 > **How this lab works.** First part is the work, second part is the answer
 > guide. Use whichever suits you and switch whenever.

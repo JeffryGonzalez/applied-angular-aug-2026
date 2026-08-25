@@ -6,6 +6,9 @@ export function withPrefix(prefix: string) {
 export function withDate() {
   return () => new Date().toISOString() + ': ';
 }
+export function withEmojiPrefix() {
+  return () => ':)';
+}
 
 type PrefixFunction = () => string;
 

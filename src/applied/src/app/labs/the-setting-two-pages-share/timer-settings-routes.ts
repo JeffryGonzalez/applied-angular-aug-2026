@@ -3,7 +3,7 @@ import { Settings } from './settings';
 import { Timer } from './timer';
 import { SessionSettings } from '../../areas/shared/data-session/session-settings';
 
-const routes: Routes = [
+const timerserviceRoutes: Routes = [
   {
     path: '',
     providers: [SessionSettings],
@@ -13,4 +13,4 @@ const routes: Routes = [
     ],
   },
 ];
-export default routes;
+export default timerserviceRoutes;

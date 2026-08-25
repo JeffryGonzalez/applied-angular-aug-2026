@@ -8,7 +8,7 @@ const SESSION_SECONDS = 25 * 60;
   template: `
     <div class="card bg-base-100 w-96 shadow-sm">
       <div class="card-body items-center">
-        <h2 class="card-title">Focus session</h2>
+        <h2 class="card-title">Focus session...</h2>
 
         <p class="font-mono text-7xl tabular-nums">{{ display() }}</p>
 

@@ -15,3 +15,5 @@
     - Maybe copy the src/app/* into a "history"?
     - Force a commit before each lab
     - Replace entire src/app with starting polad for next part.
+
+- use named routes for bundling stuff

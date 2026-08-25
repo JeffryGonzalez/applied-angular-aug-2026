@@ -1,0 +1,1 @@
+withComponentInputBinding became stable.
