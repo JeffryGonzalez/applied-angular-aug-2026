@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { signal } from '@angular/core';
 import { Ticket } from './ticket';
 
 const SEED: Ticket[] = [
@@ -9,7 +9,7 @@ const SEED: Ticket[] = [
   { id: 4105, subject: 'Phone system dropping calls', status: 'open', openedOn: '2026-08-21', assignedTo: 'a-2' },
 ];
 
-@Injectable({ providedIn: 'root' })
+
 export class TicketsStore {
   readonly tickets = signal<Ticket[]>(SEED);
 

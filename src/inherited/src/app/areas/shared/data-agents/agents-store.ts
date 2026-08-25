@@ -1,4 +1,4 @@
-import { Service, signal } from '@angular/core';
+import { signal } from '@angular/core';
 
 export interface Agent {
   id: string;
@@ -6,7 +6,7 @@ export interface Agent {
   team: string;
 }
 
-@Service()
+
 export class AgentsStore {
   readonly agents = signal<Agent[]>([
     { id: 'a-1', name: 'R. Okafor', team: 'Desktop' },

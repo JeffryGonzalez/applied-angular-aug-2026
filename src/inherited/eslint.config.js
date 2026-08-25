@@ -4,9 +4,13 @@ const { defineConfig } = require("eslint/config");
 const tseslint = require("typescript-eslint");
 const angular = require("angular-eslint");
 
+const sheriff = require("@softarc/eslint-plugin-sheriff");
+
 module.exports = defineConfig([
   {
     files: ["**/*.ts"],
+        plugins: { "@softarc/sheriff": sheriff },
+
     extends: [
       eslint.configs.recommended,
       tseslint.configs.recommended,
@@ -15,6 +19,7 @@ module.exports = defineConfig([
     ],
     processor: angular.processInlineTemplates,
     rules: {
+      "@softarc/sheriff/dependency-rule": "error" ,
       "@angular-eslint/directive-selector": [
         "error",
         {

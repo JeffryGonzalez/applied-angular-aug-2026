@@ -1,5 +1,5 @@
 import { Component, inject, input, output } from '@angular/core';
-import { AgentsStore } from '../../agents/data-agents/agents-store';
+import { AgentsStore } from '../data-agents/agents-store';
 
 @Component({
   selector: 'app-assignee-picker',
@@ -12,7 +12,9 @@ import { AgentsStore } from '../../agents/data-agents/agents-store';
     >
       <option value="">Unassigned</option>
       @for (agent of agents.agents(); track agent.id) {
-        <option [value]="agent.id">{{ agent.name }} ({{ agent.team }})</option>
+        <option
+        [selected]="agent.id === assignedTo()"
+         [value]="agent.id">{{ agent.name }} ({{ agent.team }})</option>
       }
     </select>
   `,

@@ -1,8 +1,8 @@
 import { Component, computed, inject } from '@angular/core';
-import { AgentsStore } from '../../../agents/data-agents/agents-store';
-import { TicketsStore } from '../../data-tickets/tickets-store';
-import { TicketRow } from '../../ui-tickets/ticket-row';
+import { AgentsStore } from '../../../shared/data-agents/agents-store';
+import { TicketsStore } from '../../../shared/data-tickets/tickets-store';
 import { daysSince } from '../../../shared/util-shared/dates';
+import { TicketRow } from '../../ui-tickets/ticket-row';
 
 @Component({
   selector: 'app-ticket-list',
@@ -22,10 +22,13 @@ import { daysSince } from '../../../shared/util-shared/dates';
         </thead>
         <tbody>
           @for (ticket of rows(); track ticket.id) {
+          
             <app-ticket-row [ticket]="ticket" />
+          
           }
         </tbody>
       </table>
+     
     </div>
   `,
   styles: ``,

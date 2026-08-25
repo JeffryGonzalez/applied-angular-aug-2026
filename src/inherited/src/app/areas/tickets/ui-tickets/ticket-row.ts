@@ -1,7 +1,7 @@
 import { Component, inject, input } from '@angular/core';
-import { AgentsStore } from '../../agents/data-agents/agents-store';
-import { TicketsStore } from '../data-tickets/tickets-store';
-import { Ticket } from '../data-tickets/ticket';
+import { AgentsStore } from '../../shared/data-agents/agents-store';
+import { TicketsStore } from '../../shared/data-tickets/tickets-store';
+import { Ticket } from '../../shared/data-tickets/ticket';
 import { AssigneePicker } from '../../shared/ui-shared/assignee-picker';
 import { StatusBadge } from '../../shared/ui-shared/status-badge';
 
