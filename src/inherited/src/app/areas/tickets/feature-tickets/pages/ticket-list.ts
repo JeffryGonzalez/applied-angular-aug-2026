@@ -1,12 +1,14 @@
 import { Component, computed, inject } from '@angular/core';
 import { AgentsStore } from '../../../shared/data-agents/agents-store';
+import { Ticket } from '../../../shared/data-tickets/ticket';
 import { TicketsStore } from '../../../shared/data-tickets/tickets-store';
+import { AssigneePicker } from '../../../shared/ui-shared/assignee-picker';
+import { StatusBadge } from '../../../shared/ui-shared/status-badge';
 import { daysSince } from '../../../shared/util-shared/dates';
-import { TicketRow } from '../../ui-tickets/ticket-row';
 
 @Component({
   selector: 'app-ticket-list',
-  imports: [TicketRow],
+  imports: [StatusBadge, AssigneePicker],
   template: `
     <div class="overflow-x-auto">
       <table class="table">
@@ -22,13 +24,19 @@ import { TicketRow } from '../../ui-tickets/ticket-row';
         </thead>
         <tbody>
           @for (ticket of rows(); track ticket.id) {
-          
-            <app-ticket-row [ticket]="ticket" />
-          
+            <tr>
+              <td class="font-mono">{{ ticket.id }}</td>
+              <td>{{ ticket.displayTitle }}</td>
+              <td><app-status-badge [status]="ticket.status" /></td>
+              <td>{{ ticket.priority }}</td>
+              <td>{{ ticket.ageInDays }}d</td>
+              <td>
+                <app-assignee-picker [assignedTo]="ticket" (assigned)="onAssigned(ticket)" />
+              </td>
+            </tr>
           }
         </tbody>
       </table>
-     
     </div>
   `,
   styles: ``,
@@ -36,7 +44,11 @@ import { TicketRow } from '../../ui-tickets/ticket-row';
 export class TicketList {
   private readonly tickets = inject(TicketsStore);
   private readonly agents = inject(AgentsStore);
-
+  protected onAssigned(ticket: Ticket) {
+    return (agentId: string) => {
+      this.tickets.assign(ticket.id, agentId);
+    };
+  }
   // decorate the tickets so the table has everything it needs
   protected readonly rows = computed(() =>
     this.tickets.tickets().map((t) => {

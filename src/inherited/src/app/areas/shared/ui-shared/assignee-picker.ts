@@ -1,5 +1,6 @@
 import { Component, inject, input, output } from '@angular/core';
 import { AgentsStore } from '../data-agents/agents-store';
+import { Ticket } from '../data-tickets/ticket';
 
 @Component({
   selector: 'app-assignee-picker',
@@ -7,14 +8,14 @@ import { AgentsStore } from '../data-agents/agents-store';
   template: `
     <select
       class="select select-sm select-bordered"
-      [value]="assignedTo() ?? ''"
-      (change)="pick($event)"
+      [value]="assignedTo()?.assignedTo ?? ''"
+      (change)="pick()"
     >
       <option value="">Unassigned</option>
       @for (agent of agents.agents(); track agent.id) {
-        <option
-        [selected]="agent.id === assignedTo()"
-         [value]="agent.id">{{ agent.name }} ({{ agent.team }})</option>
+        <option [selected]="agent.id === assignedTo()?.assignedTo" [value]="agent.id">
+          {{ agent.name }} ({{ agent.team }})
+        </option>
       }
     </select>
   `,
@@ -24,10 +25,10 @@ export class AssigneePicker {
   // it needs the agent list, and this is the only place that has it
   protected readonly agents = inject(AgentsStore);
 
-  readonly assignedTo = input<string>();
-  readonly assigned = output<string>();
+  readonly assignedTo = input.required<Ticket>();
+  readonly assigned = output<Ticket>();
 
-  protected pick(event: Event) {
-    this.assigned.emit((event.target as HTMLSelectElement).value);
+  protected pick() {
+    this.assigned.emit(this.assignedTo());
   }
 }
