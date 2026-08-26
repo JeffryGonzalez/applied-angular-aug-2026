@@ -13,10 +13,7 @@ const handlers: HttpHandler[] = [
     else await delay(400);
 
     if (scenario === 'fails-late' || scenario === 'fails') {
-      return HttpResponse.json(
-        { message: 'That agent is at capacity.' },
-        { status: 409 },
-      );
+      return HttpResponse.json({ message: 'That agent is at capacity.' }, { status: 409 });
     }
 
     return HttpResponse.json({ id: Number(params['id']), assignedTo: body.assignedTo });

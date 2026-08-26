@@ -1,7 +1,7 @@
 import { delay, http, HttpHandler, HttpResponse } from 'msw';
 import activeScenarios from '../active-scenarios';
 
-const ENDPOINT = 'GET /api/tickets';
+const ENDPOINT = '/api/tickets';
 
 // What the API documentation promises, and what you get on a good day.
 const typical = [
@@ -99,7 +99,7 @@ const payloads: Record<string, unknown> = { typical, lying, empty: [] };
 
 const handlers: HttpHandler[] = [
   http.get(ENDPOINT, async () => {
-    const scenario = activeScenarios[ENDPOINT] ?? 'typical';
+    const scenario = activeScenarios[`GET ${ENDPOINT}`] ?? 'typical';
 
     if (scenario === 'slow') await delay(2000);
     if (scenario === 'error') return new HttpResponse(null, { status: 500 });

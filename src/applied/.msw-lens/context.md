@@ -1,5 +1,5 @@
 # msw-lens — project context
-generated: 2026-08-26T20:33:43.343Z
+generated: 2026-08-26T20:51:20.055Z
 
 > Drop this file into any LLM conversation for instant context about what
 > is mocked in this project, what scenarios exist, and what is currently active.
@@ -8,18 +8,18 @@ generated: 2026-08-26T20:33:43.343Z
 
 | endpoint | method | active scenario |
 |----------|--------|-----------------|
-| `/api/tickets` | GET | `empty` |
+| `/api/tickets` | GET | `typical` |
 | `/api/tickets/:id/assignee` | PUT | `typical` |
 
 ## Scenario details
 
 ### GET `/api/tickets`
-manifest: `src\mocks\tickets\tickets.yaml`
+manifest: `src/mocks/tickets/tickets.yaml`
 > The ticket queue. Feeds the list in the-response-that-lied and the-shape-you-render.
 
-- **typical** — Every field present and the documented type is true. The app works and nothing is learned.
+- **typical** ✓ **(active)** — Every field present and the documented type is true. The app works and nothing is learned.
 - **lying** — What the endpoint actually returns in production. Same code, five rows, four different ways of being surprising.
-- **empty** ✓ **(active)** — No tickets. Verifies whether an empty state exists — it does not, yet.
+- **empty** — No tickets. Verifies whether an empty state exists — it does not, yet.
 - **slow** *(delay: 2000)* — Two second delay. Verifies whether anything is shown while waiting — nothing is.
 - **error** — 500 from the server. Verifies the component says something rather than rendering an empty table.
 - **missing** — 404. A different failure with the same shape — worth checking they are not handled identically when they should not be.
@@ -29,7 +29,7 @@ sourceHints:
 - `src/app/labs/the-response-that-lied/tickets-api.ts`
 
 ### PUT `/api/tickets/:id/assignee`
-manifest: `src\mocks\tickets\assign.yaml`
+manifest: `src/mocks/tickets/assign.yaml`
 > Assigns a ticket to an agent. The write in the-write-that-failed-later.
 
 - **typical** ✓ **(active)** — Succeeds after 400ms. Fast enough to feel fine, slow enough to see.

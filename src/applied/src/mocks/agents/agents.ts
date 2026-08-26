@@ -6,6 +6,12 @@ const AGENTS = [
   { id: 'a-3', name: 'M. Alvarez', team: 'Desktop' },
 ];
 
-const handlers: HttpHandler[] = [http.get('/api/agents', () => HttpResponse.json(AGENTS))];
+const handlers: HttpHandler[] = [
+  http.get('/api/agents', () => HttpResponse.json(AGENTS)),
+  http.get('/api/agents/:id', ({ params }) => {
+    const agent = AGENTS.find((a) => a.id === params['id']);
+    return HttpResponse.json(agent ?? null, { status: agent ? 200 : 404 });
+  }),
+];
 
 export default handlers;
