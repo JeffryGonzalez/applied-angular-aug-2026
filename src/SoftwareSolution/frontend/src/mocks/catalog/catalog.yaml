@@ -1,0 +1,26 @@
+endpoint: /api/catalog
+method: GET
+shape: collection
+description: The full list of catalog items rendered by the Catalog page table.
+
+responseType:
+  name: zCatalogCreateModel
+  path: src/app/areas/shared/api/zod.gen.ts
+
+context:
+  sourceHints:
+    - src/app/areas/catalog/feature-catalog/pages/catalog.ts
+    - src/app/areas/catalog/feature-catalog/catalog-store.ts
+    - src/app/areas/shared/api/zod.gen.ts
+  hints:
+    - "Every vendorId here comes from the VENDOR_IDS constant in src/mocks/catalog/vendors.ts — change one and the vendor join in CatalogStore breaks for that row"
+
+scenarios:
+  typical:
+    description: Tests that the catalog table renders a full page of rows with ID, name, vendor ID and deprecated columns populated.
+    active: true
+  empty:
+    description: Tests what the page shows when the table body has no rows — currently just the header and the "Catalog Works" text, so it reveals whether an empty-state message is needed.
+  slow:
+    description: Tests the three seconds between navigation and the table appearing — reveals that httpResource has no loading/skeleton branch in the template.
+    delay: "3000"

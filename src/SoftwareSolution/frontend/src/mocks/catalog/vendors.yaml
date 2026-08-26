@@ -1,0 +1,26 @@
+endpoint: /api/vendors
+method: GET
+shape: collection
+description: The vendors the catalog page joins against to show a vendor name per catalog item.
+
+responseType:
+  name: zVendorDetailsModel
+  path: src/app/areas/shared/api/zod.gen.ts
+
+context:
+  sourceHints:
+    - src/app/areas/catalog/feature-catalog/pages/catalog.ts
+    - src/app/areas/catalog/feature-catalog/catalog-store.ts
+    - src/app/areas/shared/api/zod.gen.ts
+  hints:
+    - "Vendor ids here must match the vendorId values served by GET /api/catalog — both handlers share the VENDOR_IDS constant in src/mocks/catalog/vendors.ts"
+
+scenarios:
+  typical:
+    description: Tests that every catalog row resolves to a vendor name — five vendors covering all vendorIds in the typical catalog response.
+    active: true
+  empty:
+    description: Tests the join when no vendors come back — every catalog row has a vendorId that matches nothing, so it reveals whether the computed falls back to a placeholder or renders blank.
+  slow:
+    description: Tests the page while only one of the two resources has resolved — catalog rows are ready but vendor names are not, for three seconds.
+    delay: "3000"
