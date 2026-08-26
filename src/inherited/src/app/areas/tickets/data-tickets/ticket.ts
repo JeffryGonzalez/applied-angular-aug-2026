@@ -6,9 +6,3 @@ export interface Ticket {
   assignedTo?: string;
   priority?: 'low' | 'normal' | 'high';
 }
-
-export type TicketViewModel = Ticket & {
-  displayTitle: string;
-  agentName: string;
-  ageInDays: { days: number; hours: number; minutes: number };
-};

@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { AgentsStore } from '../../../shared/data-agents/agents-store';
-import { TicketsStore } from '../../../shared/data-tickets/tickets-store';
+import { TicketsStore } from '../../../tickets/data-tickets/tickets-store';
 
 @Component({
   selector: 'app-agent-list',

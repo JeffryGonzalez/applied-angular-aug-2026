@@ -12,9 +12,9 @@ import { AgentsStore } from '../data-agents/agents-store';
     >
       <option value="">Unassigned</option>
       @for (agent of agents.agents(); track agent.id) {
-        <option
-        [selected]="agent.id === assignedTo()"
-         [value]="agent.id">{{ agent.name }} ({{ agent.team }})</option>
+        <option [selected]="agent.id === assignedTo()" [value]="agent.id">
+          {{ agent.name }} ({{ agent.team }})
+        </option>
       }
     </select>
   `,

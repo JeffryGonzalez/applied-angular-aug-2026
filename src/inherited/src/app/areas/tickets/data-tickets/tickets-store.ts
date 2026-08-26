@@ -1,13 +1,12 @@
-import { computed, signal } from '@angular/core';
-import { Ticket, TicketViewModel } from './ticket';
-import { daysSince } from '../util-shared/dates';
+import { signal } from '@angular/core';
+import { Ticket } from './ticket';
 
 const SEED: Ticket[] = [
   {
     id: 4101,
     subject: 'Badge reader offline at dock 3',
     status: 'open',
-    openedOn: '2026-08-11',
+    openedOn: '2026-08-11T17:07:52.010Z',
     assignedTo: 'a-2',
     priority: 'high',
   },
@@ -15,21 +14,21 @@ const SEED: Ticket[] = [
     id: 4102,
     subject: 'Cannot print packing slips',
     status: 'waiting',
-    openedOn: '2026-08-14',
+    openedOn: '2026-08-14T17:07:52.010Z',
     assignedTo: 'a-1',
   },
   {
     id: 4103,
     subject: 'Laptop will not join wifi',
     status: 'open',
-    openedOn: '2026-08-19',
+    openedOn: '2026-08-19T17:07:52.010Z',
     priority: 'normal',
   },
   {
     id: 4104,
     subject: 'Shared drive missing',
     status: 'closed',
-    openedOn: '2026-07-30',
+    openedOn: '2026-07-30T17:07:52.010Z',
     assignedTo: 'a-3',
     priority: 'low',
   },
@@ -48,14 +47,4 @@ export class TicketsStore {
   assign(id: number, agentId: string) {
     this.tickets.update((all) => all.map((t) => (t.id === id ? { ...t, assignedTo: agentId } : t)));
   }
-
-  rows = computed(() => {
-    return this.tickets().map((t: Ticket) => {
-      return {
-        ...t,
-        displayTitle: `${t.subject} (${t.status})`,
-        ageInDays: daysSince(t.openedOn),
-      };
-    });
-  });
 }

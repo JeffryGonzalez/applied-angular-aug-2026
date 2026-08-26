@@ -1,13 +1,13 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AgentsStore } from '../../../shared/data-agents/agents-store';
-import { TicketsStore } from '../../../shared/data-tickets/tickets-store';
-import { daysSince } from '../../../shared/util-shared/dates';
+import { TicketsStore } from '../../data-tickets/tickets-store';
 import { TicketRow } from '../../ui-tickets/ticket-row';
-import { HttpClient } from '@angular/common/http';
+import { ticketListStore } from '../../data-tickets/ticket-list-store';
 
 @Component({
   selector: 'app-ticket-list',
   imports: [TicketRow],
+  providers: [ticketListStore],
   template: `
     <div class="overflow-x-auto">
       <table class="table">
@@ -22,7 +22,7 @@ import { HttpClient } from '@angular/common/http';
           </tr>
         </thead>
         <tbody>
-          @for (ticket of tickets.rows(); track ticket.id) {
+          @for (ticket of store.rows(); track ticket.id) {
             <app-ticket-row [ticket]="ticket" />
           }
         </tbody>
@@ -34,6 +34,7 @@ import { HttpClient } from '@angular/common/http';
 export class TicketList {
   protected readonly tickets = inject(TicketsStore);
   private readonly agents = inject(AgentsStore);
+  protected readonly store = inject(ticketListStore);
 
   // decorate the tickets so the table has everything it needs
   // protected readonly rows = computed(() =>

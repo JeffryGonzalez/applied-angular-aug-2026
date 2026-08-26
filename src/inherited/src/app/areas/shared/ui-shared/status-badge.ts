@@ -3,11 +3,10 @@ import { Component, input } from '@angular/core';
 @Component({
   selector: 'app-status-badge',
   imports: [],
-  templateUrl: `./status-badge.html`,
+  template: `<span class="badge" [class]="tone()">{{ status() }}</span>`,
   styles: ``,
 })
 export class StatusBadge {
-
   readonly status = input.required<string>();
 
   protected tone() {
