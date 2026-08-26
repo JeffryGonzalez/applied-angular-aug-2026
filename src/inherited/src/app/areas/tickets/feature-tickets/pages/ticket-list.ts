@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
-import { AgentsStore } from '../../../shared/data-agents/agents-store';
-import { TicketsStore } from '../../data-tickets/tickets-store';
-import { TicketRow } from '../../ui-tickets/ticket-row';
 import { ticketListStore } from '../../data-tickets/ticket-list-store';
+import { TicketListHeader } from '../../ui-tickets/ticket-list-header';
+import { TicketRow } from '../../ui-tickets/ticket-row';
 
 @Component({
   selector: 'app-ticket-list',
-  imports: [TicketRow],
+  imports: [TicketRow, TicketListHeader],
   providers: [ticketListStore],
   template: `
+    <app-ticket-list-header />
     <div class="overflow-x-auto">
       <table class="table">
         <thead>
@@ -23,7 +23,7 @@ import { ticketListStore } from '../../data-tickets/ticket-list-store';
         </thead>
         <tbody>
           @for (ticket of store.rows(); track ticket.id) {
-            <app-ticket-row [ticket]="ticket" />
+            <app-ticket-row (agentAssignedToTicket)="handle($event)" [ticket]="ticket" />
           }
         </tbody>
       </table>
@@ -32,17 +32,8 @@ import { ticketListStore } from '../../data-tickets/ticket-list-store';
   styles: ``,
 })
 export class TicketList {
-  protected readonly tickets = inject(TicketsStore);
-  private readonly agents = inject(AgentsStore);
   protected readonly store = inject(ticketListStore);
-
-  // decorate the tickets so the table has everything it needs
-  // protected readonly rows = computed(() =>
-  //   this.tickets.tickets().map((t) => {
-  //     t.displayTitle = `${t.subject} (${t.status})`;
-  //     t.agentName = this.agents.nameFor(t.assignedTo);
-  //     t.ageInDays = daysSince(t.openedOn).days;
-
-  //     return t;
-  //   }),
+  handle(agentId: string) {
+    // do something here
+  }
 }

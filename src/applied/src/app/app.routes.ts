@@ -22,4 +22,9 @@ export const routes: Routes = [
     title: 'User Settings',
     loadChildren: () => import('./labs/user-settings/user-setting-routes'),
   },
+  {
+    path: 'validation',
+    title: 'Validating API Responses',
+    loadChildren: () => import('./labs/validation/routes')
+  }
 ];

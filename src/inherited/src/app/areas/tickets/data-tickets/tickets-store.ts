@@ -45,6 +45,7 @@ export class TicketsStore {
   readonly tickets = signal<Ticket[]>(SEED);
 
   assign(id: number, agentId: string) {
+    // WTH??
     this.tickets.update((all) => all.map((t) => (t.id === id ? { ...t, assignedTo: agentId } : t)));
   }
 }

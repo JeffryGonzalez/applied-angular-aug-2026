@@ -1,7 +1,5 @@
-import { Component, inject, input } from '@angular/core';
-import { AgentsStore } from '../../shared/data-agents/agents-store';
+import { Component, input, output } from '@angular/core';
 
-import { TicketsStore } from '../data-tickets/tickets-store';
 import { AssigneePicker } from '../../shared/ui-shared/assignee-picker';
 import { StatusBadge } from '../../shared/ui-shared/status-badge';
 import { TicketViewModel } from '../shared-tickets/types';
@@ -19,7 +17,11 @@ import { TicketViewModel } from '../shared-tickets/types';
       {{ ticket().ageInDays.minutes }}m
     </td>
     <td>
-      <app-assignee-picker [assignedTo]="ticket().assignedTo" (assigned)="onAssigned($event)" />
+      @if (ticket().status === 'closed') {
+        <span>Ticket is Closed</span>
+      } @else {
+        <app-assignee-picker [assignedTo]="ticket().assignedTo" (assigned)="onAssigned($event)" />
+      }
     </td>
   `,
   styles: ``,
@@ -28,17 +30,10 @@ import { TicketViewModel } from '../shared-tickets/types';
   },
 })
 export class TicketRow {
-  // saves plumbing the event all the way up to the page
-  private readonly tickets = inject(TicketsStore);
-  private readonly agents = inject(AgentsStore);
-
   readonly ticket = input.required<TicketViewModel>();
 
+  agentAssignedToTicket = output<string>();
   protected onAssigned(agentId: string) {
-    this.tickets.assign(this.ticket().id, agentId);
-  }
-
-  protected teamOf(id: string | undefined) {
-    return this.agents.agents().find((a) => a.id === id)?.team;
+    this.agentAssignedToTicket.emit(agentId);
   }
 }

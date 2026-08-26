@@ -15,6 +15,8 @@ export class StatusBadge {
         return 'badge-error';
       case 'waiting':
         return 'badge-warning';
+      case 'closed':
+        return 'badge-success';
       default:
         return 'badge-ghost';
     }
