@@ -17,4 +17,9 @@ export const routes: Routes = [
     title: 'Tool List',
     loadChildren: () => import('./labs/tools/tools-routes'),
   },
+  {
+    path: 'settings',
+    title: 'User Settings',
+    loadChildren: () => import('./labs/user-settings/user-setting-routes'),
+  },
 ];

@@ -1,22 +1,23 @@
-import { Component, computed, DOCUMENT, effect, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { SessionSettings } from '../../areas/shared/data-session/session-settings';
+import { TimerStore } from './timer-store';
 
 @Component({
   selector: 'app-timer',
   imports: [RouterLink],
+  providers: [],
   template: `
     <div class="card bg-base-100 w-96 shadow-sm">
       <div class="card-body items-center">
         <h2 class="card-title">Focus session</h2>
 
-        <p class="font-mono text-7xl tabular-nums">{{ display() }}</p>
+        <p class="font-mono text-7xl tabular-nums">{{ store.display() }}</p>
 
         <div class="card-actions">
-          <button class="btn btn-primary" (click)="toggle()">
-            {{ running() ? 'Pause' : 'Start' }}
+          <button class="btn btn-primary" (click)="store.toggle()">
+            {{ store.running() ? 'Pause' : 'Start' }}
           </button>
-          <button class="btn btn-ghost" (click)="reset()">Reset</button>
+          <button class="btn btn-ghost" (click)="store.reset()">Reset</button>
         </div>
 
         <a class="link link-hover text-sm" routerLink="settings" id="btn-settings">Settings</a>
@@ -26,40 +27,5 @@ import { SessionSettings } from '../../areas/shared/data-session/session-setting
   styles: ``,
 })
 export class Timer {
-  private readonly settings = inject(SessionSettings);
-
-  private readonly remaining = signal(this.settings.sessionMinutes() * 60);
-  protected readonly running = signal(false);
-
-  private documentEnv = inject(DOCUMENT);
-
-  protected readonly display = computed(() => {
-    const total = this.remaining();
-    const minutes = Math.floor(total / 60);
-    const seconds = total % 60;
-    return `${minutes}:${String(seconds).padStart(2, '0')}`;
-  });
-
-  constructor() {
-    effect((onCleanup) => {
-      if (!this.running()) return;
-
-      const id = setInterval(() => {
-        this.remaining.update((s) => s - 1);
-      }, 1000);
-
-      onCleanup(() => clearInterval(id));
-    });
-  }
-
-  protected toggle() {
-    const settingsButton = this.documentEnv.getElementById('btn-settings') as HTMLButtonElement;
-    settingsButton.classList.add('btn-error');
-    this.running.update((r) => !r);
-  }
-
-  protected reset() {
-    this.running.set(false);
-    this.remaining.set(this.settings.sessionMinutes() * 60);
-  }
+  protected readonly store = inject(TimerStore);
 }

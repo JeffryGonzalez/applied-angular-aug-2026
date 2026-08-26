@@ -1,16 +1,12 @@
 import { Routes } from '@angular/router';
-import { Settings } from './settings';
 import { Timer } from './timer';
-import { SessionSettings } from '../../areas/shared/data-session/session-settings';
+import { TimerStore } from './timer-store';
 
 const timerserviceRoutes: Routes = [
   {
     path: '',
-    providers: [SessionSettings],
-    children: [
-      { path: '', component: Timer },
-      { path: 'settings', component: Settings },
-    ],
+    providers: [TimerStore],
+    children: [{ path: '', component: Timer }],
   },
 ];
 export default timerserviceRoutes;

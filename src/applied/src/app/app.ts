@@ -1,8 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { routes } from './app.routes';
-import { Settings } from './labs/the-setting-two-pages-share/settings';
-import { SessionSettings } from './areas/shared/data-session/session-settings';
 
 @Component({
   selector: 'app-root',

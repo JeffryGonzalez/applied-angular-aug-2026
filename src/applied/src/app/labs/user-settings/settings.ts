@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { SessionSettings } from '../../areas/shared/data-session/session-settings';
+import { SessionSettingsStore } from '../../areas/shared/data-session/session-settings';
 
 @Component({
   selector: 'app-settings',
@@ -30,7 +30,7 @@ import { SessionSettings } from '../../areas/shared/data-session/session-setting
   styles: ``,
 })
 export class Settings {
-  protected readonly settings = inject(SessionSettings);
+  protected readonly settings = inject(SessionSettingsStore);
 
   protected onChange(event: Event) {
     const value = Number((event.target as HTMLInputElement).value);

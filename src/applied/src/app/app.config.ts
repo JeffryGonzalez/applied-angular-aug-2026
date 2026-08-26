@@ -6,7 +6,7 @@ import {
 } from '@angular/router';
 
 import { routes } from './app.routes';
-import { SessionSettings } from './areas/shared/data-session/session-settings';
+import { SessionSettingsStore } from './areas/shared/data-session/session-settings';
 // Todo: This is "ganky" - needs venues/bundling
 
 // app.config is compiled into the main.js bundle. it should only EVER refer to things that are owned
@@ -17,6 +17,7 @@ export const appConfig: ApplicationConfig = {
     // this is saying that this service can be injected anywhere in the entire application.
     // despite the angular docs, it is not a "singleton", and neither is "injectable({providedIn: root})"
     // SessionSettings,
+    SessionSettingsStore,
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       routes,

@@ -6,7 +6,6 @@ export interface Agent {
   team: string;
 }
 
-
 export class AgentsStore {
   readonly agents = signal<Agent[]>([
     { id: 'a-1', name: 'R. Okafor', team: 'Desktop' },

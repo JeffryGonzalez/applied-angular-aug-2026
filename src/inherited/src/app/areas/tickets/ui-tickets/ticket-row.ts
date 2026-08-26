@@ -9,21 +9,19 @@ import { StatusBadge } from '../../shared/ui-shared/status-badge';
   selector: 'app-ticket-row',
   imports: [AssigneePicker, StatusBadge],
   template: `
-    <tr>
-      <td class="font-mono">{{ ticket().id }}</td>
-      <td>{{ ticket().displayTitle }}</td>
-      <td><app-status-badge [status]="ticket().status" /></td>
-      <td>{{ ticket().priority }}</td>
-      <td>{{ ticket().ageInDays }}d</td>
-      <td>
-        <app-assignee-picker
-          [assignedTo]="ticket().assignedTo"
-          (assigned)="onAssigned($event)"
-        />
-      </td>
-    </tr>
+    <td class="font-mono">{{ ticket().id }}</td>
+    <td>{{ ticket().displayTitle }}</td>
+    <td><app-status-badge [status]="ticket().status" /></td>
+    <td>{{ ticket().priority }}</td>
+    <td>{{ ticket().ageInDays }}d</td>
+    <td>
+      <app-assignee-picker [assignedTo]="ticket().assignedTo" (assigned)="onAssigned($event)" />
+    </td>
   `,
   styles: ``,
+  host: {
+    '[style.display]': "'table-row'",
+  },
 })
 export class TicketRow {
   // saves plumbing the event all the way up to the page
