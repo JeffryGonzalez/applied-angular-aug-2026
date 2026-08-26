@@ -4,8 +4,7 @@
  * Keys are "METHOD endpoint", values are scenario names defined in the handler.
  */
 const activeScenarios: Record<string, string> = {
-  '/api/tickets': 'lying',
-  '/api/tickets/:id/assignee': 'typical',
+  'GET /api/tickets': 'empty',
 };
 
 export default activeScenarios;

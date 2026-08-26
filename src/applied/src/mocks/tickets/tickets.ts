@@ -1,7 +1,7 @@
 import { delay, http, HttpHandler, HttpResponse } from 'msw';
 import activeScenarios from '../active-scenarios';
 
-const ENDPOINT = '/api/tickets';
+const ENDPOINT = 'GET /api/tickets';
 
 // What the API documentation promises, and what you get on a good day.
 const typical = [
