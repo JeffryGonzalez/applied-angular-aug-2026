@@ -1,0 +1,56 @@
+endpoint: /api/vendors
+method: POST
+description: Creates a vendor and returns the created vendor, so an Add Vendor form can pessimistically add the server's entity to the store — the same exercise as POST /api/vendors/:vendorId/catalog-items, but with a nested object in the form.
+
+responseType:
+  name: zVendorModel
+  path: src/app/areas/shared/api/zod.gen.ts
+
+context:
+  sourceHints:
+    - src/app/areas/catalog/feature-catalog/pages/add.ts
+    - src/app/areas/catalog/feature-catalog/catalog-store.ts
+    - src/mocks/catalog/catalog-items.yaml
+    - src/app/areas/shared/api/zod.gen.ts
+  hints:
+    - "Student exercise. There is no vendors feature area yet — the form, store and route are what they build. This endpoint exists so the pessimistic add has something real to add."
+    - "The 201 body is a full VendorModel — id and createdAt come from the server. zCreateVendorModel (the POST body) has neither, which is the whole reason the response has to be what gets added to the store."
+    - "The request body is nested: pointOfContact { name, email, phone }. Harder than the catalog form, which was two flat fields — this is the point of the exercise."
+    - "Ids are sequential (0a1b2c3d-2001-...) so a newly added vendor is visually distinct from the five seeded VENDOR_IDS in src/mocks/catalog/vendors.ts."
+    - "The handler is stateless: a created vendor is NOT added to what GET /api/vendors returns. Reloading the list makes it disappear — deliberate, so an optimistic-vs-pessimistic mistake is visible."
+    - "GET /api/vendors is currently on its `slow` scenario (3s). If a new form seems to hang on load, that is the GET, not this POST."
+    - "The OpenAPI spec documents POST /vendors as a bodiless 200. This mock returns 201 with the created vendor instead, which is what the real API should do; the `bodiless-200` scenario reproduces the spec as written."
+
+scenarios:
+  created:
+    description: Tests that a submit round-trips — the form clears and the new vendor appears in the list with the id and createdAt the server assigned, not client-invented ones.
+    active: true
+    httpStatus: 201
+  slow:
+    description: Tests the three seconds between pressing submit and the vendor appearing — reveals whether the submit button shows a pending/disabled state or can be pressed repeatedly.
+    httpStatus: 201
+    delay: "3000"
+  never-resolves:
+    description: Tests a submission that never settles — reveals whether the form stays locked forever with no timeout or cancel path.
+    delay: infinite
+  validation-error:
+    description: Tests server rules the client schema cannot know about, including one on a nested field — reveals whether a PointOfContact.Email error can be surfaced next to the nested contact input or only as a form-level summary.
+    httpStatus: 400
+  conflict:
+    description: Tests submitting a vendor name that already exists — reveals whether a duplicate shows a meaningful message with the typed values preserved for editing.
+    httpStatus: 409
+  unauthorized:
+    description: Tests a session that expired while the form was being filled in — reveals whether the user is redirected to login or left staring at a form that silently cleared.
+    httpStatus: 401
+  server-error:
+    description: Tests whether a 500 leaves the typed vendor and contact details in place to retry, or whether the form resets and the work is lost.
+    httpStatus: 500
+  normalized-url:
+    description: Tests that the list shows the server's canonicalized URL rather than what was typed — the scenario that fails visibly if the store adds the form model instead of the response body.
+    httpStatus: 201
+  contact-missing-phone:
+    description: Tests a created vendor whose contact phone comes back empty — reveals whether the vendor display renders a blank gap or handles a missing contact field.
+    httpStatus: 201
+  bodiless-200:
+    description: Tests the response the OpenAPI spec actually documents — a 200 with no body at all, so there is no entity to add and the vendor list has to be reloaded to see the new row.
+    httpStatus: 200

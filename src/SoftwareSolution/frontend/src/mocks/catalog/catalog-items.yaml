@@ -1,0 +1,60 @@
+endpoint: /api/vendors/:vendorId/catalog-items
+method: POST
+description: Creates a catalog item for a vendor and returns the created item, so the Add form can pessimistically add the server's entity to the store instead of fabricating one.
+
+responseType:
+  name: zPostVendorsByVendorIdCatalogItemsResponse
+  path: src/app/areas/shared/api/zod.gen.ts
+
+context:
+  sourceHints:
+    - src/app/areas/catalog/feature-catalog/pages/add.ts
+    - src/app/areas/catalog/feature-catalog/catalog-store.ts
+    - src/app/areas/shared/api/zod.gen.ts
+    - src/app/areas/shared/api/types.gen.ts
+  hints:
+    - "The 201 body is a full CatalogItem — id and isDeprecated come from the server. This is the entity CatalogStore.addCatalogItem should addEntity(), replacing the crypto.randomUUID() item it fabricates today."
+    - "vendorId appears in both the path and the body (zCatalogCreateItem). The handler treats the path param as authoritative and echoes that one back."
+    - "Ids are sequential (0a1b2c3d-1nnn-...) rather than random, so a pessimistically added row is visually distinguishable from the seeded GET /api/catalog rows."
+    - "Only 201 and 404 are in the OpenAPI spec (openapispecs/software-api-v1.json). 400/409/401/500 are assumed ASP.NET behavior — 400 and 409 use RFC 9457 ProblemDetails, and 404 returns a bare JSON string exactly as the spec types it."
+    - "Add.form has no error branch for a rejected submission, and add.ts calls form().reset() right after awaiting the store — every non-2xx scenario tests whether a failed POST still wipes the form."
+
+scenarios:
+  created:
+    description: Tests that a submit round-trips — the form clears and the new row appears in the catalog list with the id the server assigned, not a client-generated one.
+    active: true
+    httpStatus: 201
+  slow:
+    description: Tests the three seconds between pressing submit and the row appearing — reveals that the submit button has no pending/disabled state, so it can be pressed repeatedly.
+    httpStatus: 201
+    delay: "3000"
+  never-resolves:
+    description: Tests a submission that never settles — reveals whether the form stays locked forever or silently accepts more submits with no timeout or cancel path.
+    delay: infinite
+  validation-error:
+    description: Tests a server-side rule the client zod schema cannot know about — reveals whether field-level errors from a ProblemDetails errors dictionary surface next to the name input, or vanish while the form resets anyway.
+    httpStatus: 400
+  conflict:
+    description: Tests submitting a name this vendor already uses — reveals whether a duplicate is shown as a meaningful message with the typed values preserved for editing.
+    httpStatus: 409
+  vendor-not-found:
+    description: Tests submitting against a vendor that no longer exists (stale dropdown) — reveals what happens when the error body is a bare string rather than the ProblemDetails the UI expects.
+    httpStatus: 404
+  unauthorized:
+    description: Tests a session that expired while the form was being filled in — reveals whether the user is redirected to login or left staring at a form that silently cleared.
+    httpStatus: 401
+  server-error:
+    description: Tests whether a 500 leaves the typed name and vendor in place to retry, or whether the form resets and the work is lost.
+    httpStatus: 500
+  renamed-by-server:
+    description: Tests that the list shows the server's normalized name rather than what was typed — the only scenario that fails visibly if the store adds the form model instead of the response body.
+    httpStatus: 201
+  deprecated-on-create:
+    description: Tests a new item that arrives already flagged deprecated — reveals whether the deprecated column reflects the response or the false the client hard-codes today.
+    httpStatus: 201
+  unknown-vendor-echo:
+    description: Tests a created item whose vendorId matches nothing in GET /api/vendors — exercises the catalogWithVendor join for a row added after load, where vendor comes back undefined.
+    httpStatus: 201
+  no-content:
+    description: Tests a 201 with an empty body and only a Location header — reveals whether the store copes with having no entity to add, or needs to reload the catalog instead.
+    httpStatus: 201

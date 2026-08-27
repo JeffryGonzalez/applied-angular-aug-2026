@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet, RouterLinkActive } from '@angular/router';
 import { routes } from './app.routes';
+import { Auth } from './areas/shared/auth/auth';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, Auth],
   providers: [],
 
   template: `
@@ -24,6 +25,9 @@ import { routes } from './app.routes';
             </li>
           }
         </ul>
+        <div class="flex-1">
+          <app-auth></app-auth>
+        </div>
       </div>
       <main class="p-6">
         <router-outlet />

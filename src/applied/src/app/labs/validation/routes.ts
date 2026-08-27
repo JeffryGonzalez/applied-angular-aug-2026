@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { TicketsApi } from './tickets-api';
 import { TicketList } from './ticket-list';
 import { AgentDetails } from './agent-details';
-import { AddAgent } from './add-agent';
+import { AddTicket } from './add-ticket';
 
 const routes: Routes = [
   {
@@ -10,7 +10,7 @@ const routes: Routes = [
     providers: [TicketsApi],
     component: TicketList,
     children: [
-      { path: 'add', component: AddAgent },
+      { path: 'add', component: AddTicket },
       { path: ':id', component: AgentDetails },
     ],
   },

@@ -9,60 +9,63 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   selector: 'app-ticket-list',
   imports: [JsonPipe, RouterLink, RouterOutlet],
   template: `
-    <div class="flex flex-col gap-4">
-      <h2 class="text-xl">Ticket queue</h2>
+    <div class="flex flex-row gap-8">
+      <div class="flex flex-col gap-4">
+        <h2 class="text-xl">Ticket queue</h2>
 
-      @if (ticketResource.error()) {
-        <div class="alert alert-error">Bummer!</div>
-      } @else {
-        @if (ticketResource.isLoading()) {
-          <p>Chill, bro - getting the tickets!</p>
+        @if (ticketResource.error()) {
+          <div class="alert alert-error">Bummer!</div>
         } @else {
-          <table class="table w-fit bg-base-100">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Subject</th>
-                <th>Status</th>
-                <th>Opened</th>
-                <th>Priority</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (row of rows(); track row.id) {
+          @if (ticketResource.isLoading()) {
+            <p>Chill, bro - getting the tickets!</p>
+          } @else {
+            <table class="table w-fit bg-base-100">
+              <thead>
                 <tr>
-                  <td class="font-mono">{{ row.id }}</td>
-                  <td>{{ row.subject }}</td>
-                  <td>{{ row.status }}</td>
-                  <td>{{ row.openedOn }}</td>
-                  <td>{{ row.priority }}</td>
+                  <th>#</th>
+                  <th>Subject</th>
+                  <th>Status</th>
+                  <th>Opened</th>
+                  <th>Priority</th>
                 </tr>
-              } @empty {
-                <td class="font-mono"></td>
-                <td>No Data! Sorry</td>
-                <td>No Data! Sorry</td>
-                <td>No Data! Sorry</td>
-                <td>No Data! Sorry</td>
-              }
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                @for (row of rows(); track row.id) {
+                  <tr>
+                    <td class="font-mono">{{ row.id }}</td>
+                    <td>{{ row.subject }}</td>
+                    <td>{{ row.status }}</td>
+                    <td>{{ row.openedOn }}</td>
+                    <td>{{ row.priority }}</td>
+                  </tr>
+                } @empty {
+                  <td class="font-mono"></td>
+                  <td>No Data! Sorry</td>
+                  <td>No Data! Sorry</td>
+                  <td>No Data! Sorry</td>
+                  <td>No Data! Sorry</td>
+                }
+              </tbody>
+            </table>
+          }
         }
-      }
-    </div>
-    <p>a-1, a-2, a-3</p>
-    <input class="input" [value]="id()" (input)="id.set($event.target.value)" />
-    <pre>
-        {{ agentResource.value() | json }}
-    </pre>
-    <div class="flex flex-row gap-4">
-      <a [routerLink]="['a-1']" class="btn btn-primary">View Agent Details a-1</a>
-      <a [routerLink]="['a-2']" class="btn btn-primary">View Agent Details a-2</a>
-      <a [routerLink]="['a-3']" class="btn btn-primary">View Agent Details a-3</a>
-      <a [routerLink]="['add']" class="btn btn-primary">Add Ticket</a>
-    </div>
-
-    <div class="p-8 bg-base-100 border-2 rounded-2xl m-8">
-      <router-outlet />
+      </div>
+      <div>
+        <p>a-1, a-2, a-3</p>
+        <input class="input" [value]="id()" (input)="id.set($event.target.value)" />
+        <pre>
+          {{ agentResource.value() | json }}
+            </pre>
+        <div class="flex flex-row gap-4">
+          <a [routerLink]="['a-1']" class="btn btn-primary">View Agent Details a-1</a>
+          <a [routerLink]="['a-2']" class="btn btn-primary">View Agent Details a-2</a>
+          <a [routerLink]="['a-3']" class="btn btn-primary">View Agent Details a-3</a>
+          <a [routerLink]="['add']" class="btn btn-primary">Add Ticket</a>
+        </div>
+        <div class="p-8 bg-base-100 border-2 rounded-2xl m-8">
+          <router-outlet />
+        </div>
+      </div>
     </div>
   `,
   styles: ``,
@@ -94,7 +97,7 @@ export class TicketList {
   constructor() {
     effect((cb) => {
       const id = setInterval(() => {
-        //this.ticketResource.reload();
+        // this.ticketResource.reload();
       }, 5000);
       cb(() => clearInterval(id));
     });

@@ -1,18 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import {
-  form,
-  FormField,
-  FormRoot,
-  validateStandardSchema,
-  required,
-} from '@angular/forms/signals';
+import { form, FormField, FormRoot, validateStandardSchema } from '@angular/forms/signals';
 import { zCatalogCreateItem } from '../../../shared/api/zod.gen';
 import { CatalogCreateModel, CatalogStore } from '../catalog-store';
-import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-catalog-add',
-  imports: [FormField, FormRoot, JsonPipe],
+  imports: [FormField, FormRoot],
   template: `
     <form [formRoot]="form" class="w-full">
       <fieldset class="fieldset w-full">
@@ -33,7 +26,6 @@ import { JsonPipe } from '@angular/common';
               @for (e of form.name().errors(); track $index) {
                 {{ e.message }}
               }
-              <pre>{{ form.name().errorSummary() | json }}</pre>
             </span>
           }
         </div>
@@ -66,7 +58,6 @@ import { JsonPipe } from '@angular/common';
         <button type="submit" class="btn btn-primary w-1/3">Add Vendor</button>
       </fieldset>
     </form>
-    <pre> {{ model() | json }}</pre>
   `,
   styles: ``,
 })
@@ -85,9 +76,9 @@ export class Add {
     },
     {
       submission: {
-        action: async (field) => {
-          console.log(this.model());
-          return;
+        action: async () => {
+          await this.store.addCatalogItem(this.model());
+          this.form().reset();
         },
       },
     },

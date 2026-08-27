@@ -6,9 +6,11 @@ import {
 } from '@angular/router';
 
 import { routes } from './app.routes';
+import { AuthStore } from './areas/shared/auth/auth-store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    AuthStore,
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       routes,
