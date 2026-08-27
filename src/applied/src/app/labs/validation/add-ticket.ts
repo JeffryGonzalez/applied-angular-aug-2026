@@ -4,7 +4,7 @@ import { form, FormField, FormRoot } from '@angular/forms/signals';
 type Concrete<Type> = {
   [Property in keyof Type]-?: Type[Property];
 };
-
+type ConcreteCreateModel = Concrete<CreateTicketRequest>;
 @Component({
   selector: 'app-tickets-add-ticket',
   imports: [FormRoot, FormField],
@@ -28,7 +28,8 @@ type Concrete<Type> = {
 })
 export class AddTicket {
   // the backing signal I always call "model"
-  protected model = signal<Concrete<CreateTicketRequest>>({
+
+  protected model = signal<ConcreteCreateModel>({
     subject: '',
     priority: 'normal',
     assignedTo: '',
