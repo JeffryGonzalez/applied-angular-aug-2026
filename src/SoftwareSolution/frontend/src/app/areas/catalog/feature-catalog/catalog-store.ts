@@ -14,6 +14,7 @@ import { z } from 'zod';
 import { CatalogCreateItem, CatalogItem } from '../../shared/api';
 import { zCatalogCreateItem, zVendorModel } from '../../shared/api/zod.gen';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
+import { withStellarDevtools } from '@hypertheory-labs/stellar-ng-devtools';
 
 // type CatalogApiItem = z.infer<typeof zCatalogItem>;
 type VendorApiItem = z.infer<typeof zVendorModel>;
@@ -21,7 +22,12 @@ type VendorApiItem = z.infer<typeof zVendorModel>;
 export type CatalogCreateModel = z.infer<typeof zCatalogCreateItem>;
 
 export const CatalogStore = signalStore(
+  withStellarDevtools('CatalogStore', {
+    description: 'This store is just for the catalog, it uses the vendor list for support',
+    sourceHint: `src\\app\\areas\\catalog\\feature-catalog\\catalog-store.ts`,
+  }),
   withProps(() => ({
+    // is a property to this store - it's someone else's data. Read-only.
     vendorResource: httpResource<VendorApiItem[]>(() => '/api/vendors'),
   })),
   withEntities<CatalogItem>(),

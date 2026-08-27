@@ -40,4 +40,6 @@ https://angular.dev/guide/routing/route-guards
 
 When the user logs out, they should be redirected back to the catalog list.
 
+Look at https://ngrx.io/guide/signals/signal-store/events#defining-event-handlers
+
 Any stores that are holding data should also empty their stores.

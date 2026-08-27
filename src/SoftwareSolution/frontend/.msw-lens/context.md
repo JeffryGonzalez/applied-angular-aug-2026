@@ -1,5 +1,5 @@
 # msw-lens — project context
-generated: 2026-08-27T17:05:45.190Z
+generated: 2026-08-27T17:54:30.262Z
 
 > Drop this file into any LLM conversation for instant context about what
 > is mocked in this project, what scenarios exist, and what is currently active.
@@ -9,7 +9,9 @@ generated: 2026-08-27T17:05:45.190Z
 | endpoint | method | active scenario |
 |----------|--------|-----------------|
 | `/api/vendors` | GET | `slow` |
+| `/api/vendors` | POST | `slow` |
 | `/api/catalog` | GET | `typical` |
+| `/api/vendors/:vendorId/catalog-items` | POST | `created` |
 
 ## Scenario details
 
@@ -26,6 +28,27 @@ sourceHints:
 - `src/app/areas/catalog/feature-catalog/catalog-store.ts`
 - `src/app/areas/shared/api/zod.gen.ts`
 
+### POST `/api/vendors`
+manifest: `src\mocks\catalog\vendors-create.yaml`
+> Creates a vendor and returns the created vendor, so an Add Vendor form can pessimistically add the server's entity to the store — the same exercise as POST /api/vendors/:vendorId/catalog-items, but with a nested object in the form.
+
+- **created** *(201)* — Tests that a submit round-trips — the form clears and the new vendor appears in the list with the id and createdAt the server assigned, not client-invented ones.
+- **slow** ✓ **(active)** *(201, delay: 3000)* — Tests the three seconds between pressing submit and the vendor appearing — reveals whether the submit button shows a pending/disabled state or can be pressed repeatedly.
+- **never-resolves** *(delay: infinite)* — Tests a submission that never settles — reveals whether the form stays locked forever with no timeout or cancel path.
+- **validation-error** *(400)* — Tests server rules the client schema cannot know about, including one on a nested field — reveals whether a PointOfContact.Email error can be surfaced next to the nested contact input or only as a form-level summary.
+- **conflict** *(409)* — Tests submitting a vendor name that already exists — reveals whether a duplicate shows a meaningful message with the typed values preserved for editing.
+- **unauthorized** *(401)* — Tests a session that expired while the form was being filled in — reveals whether the user is redirected to login or left staring at a form that silently cleared.
+- **server-error** *(500)* — Tests whether a 500 leaves the typed vendor and contact details in place to retry, or whether the form resets and the work is lost.
+- **normalized-url** *(201)* — Tests that the list shows the server's canonicalized URL rather than what was typed — the scenario that fails visibly if the store adds the form model instead of the response body.
+- **contact-missing-phone** *(201)* — Tests a created vendor whose contact phone comes back empty — reveals whether the vendor display renders a blank gap or handles a missing contact field.
+- **bodiless-200** *(200)* — Tests the response the OpenAPI spec actually documents — a 200 with no body at all, so there is no entity to add and the vendor list has to be reloaded to see the new row.
+
+sourceHints:
+- `src/app/areas/catalog/feature-catalog/pages/add.ts`
+- `src/app/areas/catalog/feature-catalog/catalog-store.ts`
+- `src/mocks/catalog/catalog-items.yaml`
+- `src/app/areas/shared/api/zod.gen.ts`
+
 ### GET `/api/catalog`
 manifest: `src\mocks\catalog\catalog.yaml`
 > The full list of catalog items rendered by the Catalog page table.
@@ -38,6 +61,29 @@ sourceHints:
 - `src/app/areas/catalog/feature-catalog/pages/catalog.ts`
 - `src/app/areas/catalog/feature-catalog/catalog-store.ts`
 - `src/app/areas/shared/api/zod.gen.ts`
+
+### POST `/api/vendors/:vendorId/catalog-items`
+manifest: `src\mocks\catalog\catalog-items.yaml`
+> Creates a catalog item for a vendor and returns the created item, so the Add form can pessimistically add the server's entity to the store instead of fabricating one.
+
+- **created** ✓ **(active)** *(201)* — Tests that a submit round-trips — the form clears and the new row appears in the catalog list with the id the server assigned, not a client-generated one.
+- **slow** *(201, delay: 3000)* — Tests the three seconds between pressing submit and the row appearing — reveals that the submit button has no pending/disabled state, so it can be pressed repeatedly.
+- **never-resolves** *(delay: infinite)* — Tests a submission that never settles — reveals whether the form stays locked forever or silently accepts more submits with no timeout or cancel path.
+- **validation-error** *(400)* — Tests a server-side rule the client zod schema cannot know about — reveals whether field-level errors from a ProblemDetails errors dictionary surface next to the name input, or vanish while the form resets anyway.
+- **conflict** *(409)* — Tests submitting a name this vendor already uses — reveals whether a duplicate is shown as a meaningful message with the typed values preserved for editing.
+- **vendor-not-found** *(404)* — Tests submitting against a vendor that no longer exists (stale dropdown) — reveals what happens when the error body is a bare string rather than the ProblemDetails the UI expects.
+- **unauthorized** *(401)* — Tests a session that expired while the form was being filled in — reveals whether the user is redirected to login or left staring at a form that silently cleared.
+- **server-error** *(500)* — Tests whether a 500 leaves the typed name and vendor in place to retry, or whether the form resets and the work is lost.
+- **renamed-by-server** *(201)* — Tests that the list shows the server's normalized name rather than what was typed — the only scenario that fails visibly if the store adds the form model instead of the response body.
+- **deprecated-on-create** *(201)* — Tests a new item that arrives already flagged deprecated — reveals whether the deprecated column reflects the response or the false the client hard-codes today.
+- **unknown-vendor-echo** *(201)* — Tests a created item whose vendorId matches nothing in GET /api/vendors — exercises the catalogWithVendor join for a row added after load, where vendor comes back undefined.
+- **no-content** *(201)* — Tests a 201 with an empty body and only a Location header — reveals whether the store copes with having no entity to add, or needs to reload the catalog instead.
+
+sourceHints:
+- `src/app/areas/catalog/feature-catalog/pages/add.ts`
+- `src/app/areas/catalog/feature-catalog/catalog-store.ts`
+- `src/app/areas/shared/api/zod.gen.ts`
+- `src/app/areas/shared/api/types.gen.ts`
 
 ---
 

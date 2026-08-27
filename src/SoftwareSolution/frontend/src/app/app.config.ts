@@ -7,10 +7,11 @@ import {
 
 import { routes } from './app.routes';
 import { AuthStore } from './areas/shared/auth/auth-store';
-
+import { provideStellar } from '@hypertheory-labs/stellar-ng-devtools';
 export const appConfig: ApplicationConfig = {
   providers: [
     AuthStore,
+    provideStellar(),
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       routes,

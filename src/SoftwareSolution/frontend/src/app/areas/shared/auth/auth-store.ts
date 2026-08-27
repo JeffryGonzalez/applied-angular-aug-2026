@@ -10,8 +10,9 @@ export const AuthStore = signalStore(
   }),
   withReducer(
     on(AuthEvents.userLoggedIn, (a) => ({ user: a.payload.name, groups: a.payload.groups })),
+    on(AuthEvents.userLoggedOut, () => ({ user: null, groups: [] })),
   ),
-  withReducer(on(AuthEvents.userLoggedOut, () => ({ user: null, groups: [] }))),
+
   withComputed((store) => ({
     isLoggedIn: computed(() => !!store.user()),
     isHelpDesk: computed(() => store.groups().includes('HelpDesk')),

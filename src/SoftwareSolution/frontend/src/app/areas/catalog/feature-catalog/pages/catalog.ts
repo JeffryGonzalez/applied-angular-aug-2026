@@ -7,6 +7,7 @@ import { CatalogStore } from '../catalog-store';
   imports: [],
   template: `
     <p>Software Catalog</p>
+
     <table class="table">
       <thead>
         <tr>

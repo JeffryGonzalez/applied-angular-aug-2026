@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet, RouterLinkActive } from '@angular/router';
 import { routes } from './app.routes';
 import { Auth } from './areas/shared/auth/auth';
-
+import { StellarOverlayComponent } from '@hypertheory-labs/stellar-ng-devtools';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, Auth],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, Auth, StellarOverlayComponent],
   providers: [],
 
   template: `
@@ -32,6 +32,7 @@ import { Auth } from './areas/shared/auth/auth';
       <main class="p-6">
         <router-outlet />
       </main>
+      <stellar-overlay />
     </div>
   `,
   styles: ``,

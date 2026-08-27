@@ -5,6 +5,7 @@
  */
 const activeScenarios: Record<string, string> = {
   'GET /api/vendors': 'slow',
+  'POST /api/vendors': 'slow',
 };
 
 export default activeScenarios;
