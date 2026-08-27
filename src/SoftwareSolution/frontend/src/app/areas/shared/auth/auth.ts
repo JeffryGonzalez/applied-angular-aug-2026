@@ -1,12 +1,28 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AuthStore } from './auth-store';
 import { injectDispatch } from '@ngrx/signals/events';
 import { AuthEvents } from './auth-events';
+type Priorities = 'high' | 'low' | 'normal' | 'expedited';
 
 @Component({
   selector: 'app-auth',
   imports: [],
   template: `
+    @switch (priority()) {
+      @case ('high') {
+        <p>High Priority!</p>
+      }
+      @case ('low') {
+        <p>Low Priority</p>
+      }
+      @case ('normal') {
+        <p>Normal Priority</p>
+      }
+      @case ('expedited') {
+        <p>It's on it's way!</p>
+      }
+      @default never;
+    }
     <div>
       Auth
       @if (store.isLoggedIn()) {
@@ -23,12 +39,15 @@ import { AuthEvents } from './auth-events';
   styles: ``,
 })
 export class Auth {
+  protected priority = signal<Priorities>('normal');
   protected actions = injectDispatch(AuthEvents);
   protected store = inject(AuthStore);
   logout() {
+    this.actions.userChangedPassword({ oldPassword: 'wordpass', newPassword: 'wordpass!' });
     this.actions.userLoggedOut();
   }
   login(role: 'Employee' | 'HelpDesk' | 'HelpDeskManager') {
+    this.doIt(-99);
     switch (role) {
       case 'Employee':
         this.actions.userLoggedIn({ name: 'Jill', groups: [] });

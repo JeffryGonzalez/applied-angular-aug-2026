@@ -6,5 +6,6 @@ export const AuthEvents = eventGroup({
   events: {
     userLoggedIn: type<{ name: string; groups: string[] }>(),
     userLoggedOut: type<void>(),
+    userChangedPassword: type<{ oldPassword: string; newPassword: string }>(),
   },
 });

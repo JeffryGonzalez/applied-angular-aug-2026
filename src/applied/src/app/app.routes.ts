@@ -37,4 +37,9 @@ export const routes: Routes = [
     title: 'Lab 8 Outbox',
     loadChildren: () => import('./labs/lab-8/routes'),
   },
+  {
+    path: 'bonus',
+    title: 'Bonus Stuff',
+    loadChildren: () => import('./labs/bonus/routes'),
+  },
 ];
