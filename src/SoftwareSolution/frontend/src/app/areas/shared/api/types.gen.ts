@@ -5,7 +5,7 @@ export interface ClientOptions {
 }
 
 export interface CatalogItem {
-  id?: string;
+  id: string;
   vendorId?: string;
   name: string;
   isDeprecated?: boolean;

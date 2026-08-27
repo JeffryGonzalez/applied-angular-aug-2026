@@ -1,5 +1,5 @@
 # msw-lens — project context
-generated: 2026-08-26T23:57:26.595Z
+generated: 2026-08-27T16:01:09.626Z
 
 > Drop this file into any LLM conversation for instant context about what
 > is mocked in this project, what scenarios exist, and what is currently active.
@@ -8,18 +8,18 @@ generated: 2026-08-26T23:57:26.595Z
 
 | endpoint | method | active scenario |
 |----------|--------|-----------------|
-| `/api/vendors` | GET | `typical` |
+| `/api/vendors` | GET | `slow` |
 | `/api/catalog` | GET | `typical` |
 
 ## Scenario details
 
 ### GET `/api/vendors`
-manifest: `src/mocks/catalog/vendors.yaml`
+manifest: `src\mocks\catalog\vendors.yaml`
 > The vendors the catalog page joins against to show a vendor name per catalog item.
 
-- **typical** ✓ **(active)** — Tests that every catalog row resolves to a vendor name — five vendors covering all vendorIds in the typical catalog response.
+- **typical** — Tests that every catalog row resolves to a vendor name — five vendors covering all vendorIds in the typical catalog response.
 - **empty** — Tests the join when no vendors come back — every catalog row has a vendorId that matches nothing, so it reveals whether the computed falls back to a placeholder or renders blank.
-- **slow** *(delay: 3000)* — Tests the page while only one of the two resources has resolved — catalog rows are ready but vendor names are not, for three seconds.
+- **slow** ✓ **(active)** *(delay: 3000)* — Tests the page while only one of the two resources has resolved — catalog rows are ready but vendor names are not, for three seconds.
 
 sourceHints:
 - `src/app/areas/catalog/feature-catalog/pages/catalog.ts`
@@ -27,7 +27,7 @@ sourceHints:
 - `src/app/areas/shared/api/zod.gen.ts`
 
 ### GET `/api/catalog`
-manifest: `src/mocks/catalog/catalog.yaml`
+manifest: `src\mocks\catalog\catalog.yaml`
 > The full list of catalog items rendered by the Catalog page table.
 
 - **typical** ✓ **(active)** — Tests that the catalog table renders a full page of rows with ID, name, vendor ID and deprecated columns populated.

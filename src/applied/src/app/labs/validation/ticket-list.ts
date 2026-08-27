@@ -58,6 +58,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
       <a [routerLink]="['a-1']" class="btn btn-primary">View Agent Details a-1</a>
       <a [routerLink]="['a-2']" class="btn btn-primary">View Agent Details a-2</a>
       <a [routerLink]="['a-3']" class="btn btn-primary">View Agent Details a-3</a>
+      <a [routerLink]="['add']" class="btn btn-primary">Add Ticket</a>
     </div>
 
     <div class="p-8 bg-base-100 border-2 rounded-2xl m-8">

@@ -1,11 +1,18 @@
 import { Component, inject, signal } from '@angular/core';
-import { form, FormField, FormRoot, validateStandardSchema } from '@angular/forms/signals';
+import {
+  form,
+  FormField,
+  FormRoot,
+  validateStandardSchema,
+  required,
+} from '@angular/forms/signals';
 import { zCatalogCreateItem } from '../../../shared/api/zod.gen';
 import { CatalogCreateModel, CatalogStore } from '../catalog-store';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-catalog-add',
-  imports: [FormField, FormRoot],
+  imports: [FormField, FormRoot, JsonPipe],
   template: `
     <form [formRoot]="form" class="w-full">
       <fieldset class="fieldset w-full">
@@ -26,6 +33,7 @@ import { CatalogCreateModel, CatalogStore } from '../catalog-store';
               @for (e of form.name().errors(); track $index) {
                 {{ e.message }}
               }
+              <pre>{{ form.name().errorSummary() | json }}</pre>
             </span>
           }
         </div>
@@ -58,17 +66,30 @@ import { CatalogCreateModel, CatalogStore } from '../catalog-store';
         <button type="submit" class="btn btn-primary w-1/3">Add Vendor</button>
       </fieldset>
     </form>
+    <pre> {{ model() | json }}</pre>
   `,
   styles: ``,
 })
 export class Add {
   protected readonly store = inject(CatalogStore);
-  private model = signal<CatalogCreateModel>({
+  protected model = signal<CatalogCreateModel>({
     name: '',
     vendorId: '',
   });
 
-  protected readonly form = form(this.model, (schemaPath) =>
-    validateStandardSchema(schemaPath, zCatalogCreateItem),
+  protected readonly form = form(
+    this.model,
+    (schemaPath) => {
+      // required(schemaPath.name, { message: 'Give us a name!'})
+      validateStandardSchema(schemaPath, zCatalogCreateItem);
+    },
+    {
+      submission: {
+        action: async (field) => {
+          console.log(this.model());
+          return;
+        },
+      },
+    },
   );
 }
