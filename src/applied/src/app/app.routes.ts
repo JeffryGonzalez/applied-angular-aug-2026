@@ -25,6 +25,16 @@ export const routes: Routes = [
   {
     path: 'validation',
     title: 'Validating API Responses',
-    loadChildren: () => import('./labs/validation/routes')
-  }
+    loadChildren: () => import('./labs/validation/routes'),
+  },
+  {
+    path: 'lab7',
+    title: 'Lab 7 View Models',
+    loadChildren: () => import('./labs/lab-7/routes'),
+  },
+  {
+    path: 'lab8',
+    title: 'Lab 8 Outbox',
+    loadChildren: () => import('./labs/lab-8/routes'),
+  },
 ];
