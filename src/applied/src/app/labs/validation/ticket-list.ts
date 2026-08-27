@@ -87,13 +87,13 @@ export class TicketList {
 
   id = signal('a-1');
   // TODO: Debounced is pretty new - this says only produce a new value every 300 ms.
-  idQuery = debounced(this.id, 300);
+  idQuery = debounced(this.id, 3000);
   agentResource = httpResource(() => `/api/agents/${this.idQuery.value()}`);
 
   constructor() {
     effect((cb) => {
       const id = setInterval(() => {
-        this.ticketResource.reload();
+        //this.ticketResource.reload();
       }, 5000);
       cb(() => clearInterval(id));
     });

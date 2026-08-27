@@ -10,7 +10,8 @@
     "lens:init": "msw-lens --init",
     "lens": "msw-lens",
     "lens:watch": "msw-lens --watch",
-    "lens:context": "msw-lens --context"
+    "lens:context": "msw-lens --context",
+    "sync-package-json": "npx check-updates -u && npm install"
   },
   "private": true,
   "packageManager": "npm@11.12.1",
