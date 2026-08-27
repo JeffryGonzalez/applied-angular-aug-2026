@@ -2,11 +2,16 @@
 
 import * as z from 'zod';
 
-export const zCatalogCreateModel = z.object({
+export const zCatalogItem = z.object({
   id: z.uuid().optional(),
   vendorId: z.uuid().optional(),
   name: z.string().min(5).max(100),
   isDeprecated: z.boolean().optional(),
+});
+
+export const zCatalogCreateItem = z.object({
+  vendorId: z.uuid(),
+  name: z.string().min(5).max(100),
 });
 
 export const zVendorPointOfContactModel = z.object({
@@ -15,13 +20,13 @@ export const zVendorPointOfContactModel = z.object({
   phone: z.string(),
 });
 
-export const zCreateVendorRequestModel = z.object({
+export const zCreateVendorModel = z.object({
   name: z.string().min(3).max(100),
   url: z.string(),
   pointOfContact: zVendorPointOfContactModel,
 });
 
-export const zVendorDetailsModel = z.object({
+export const zVendorModel = z.object({
   id: z.uuid().optional(),
   name: z.string(),
   url: z.string(),
@@ -29,11 +34,16 @@ export const zVendorDetailsModel = z.object({
   createdAt: z.iso.datetime().optional(),
 });
 
+/**
+ * OK
+ */
+export const zGetCatalogResponse = z.array(zCatalogItem);
+
 export const zGetVendorsByVendorIdCatalogItemsPath = z.object({
   vendorId: z.uuid(),
 });
 
-export const zPostVendorsByVendorIdCatalogItemsBody = zCatalogCreateModel;
+export const zPostVendorsByVendorIdCatalogItemsBody = zCatalogCreateItem;
 
 export const zPostVendorsByVendorIdCatalogItemsPath = z.object({
   vendorId: z.uuid(),
@@ -42,7 +52,7 @@ export const zPostVendorsByVendorIdCatalogItemsPath = z.object({
 /**
  * Created
  */
-export const zPostVendorsByVendorIdCatalogItemsResponse = zCatalogCreateModel;
+export const zPostVendorsByVendorIdCatalogItemsResponse = zCatalogItem;
 
 export const zDeleteVendorsByVendorIdCatalogItemsByItemIdPath = z.object({
   vendorId: z.uuid(),
@@ -52,9 +62,9 @@ export const zDeleteVendorsByVendorIdCatalogItemsByItemIdPath = z.object({
 /**
  * OK
  */
-export const zGetVendorsResponse = z.array(zVendorDetailsModel);
+export const zGetVendorsResponse = z.array(zVendorModel);
 
-export const zPostVendorsBody = zCreateVendorRequestModel;
+export const zPostVendorsBody = zCreateVendorModel;
 
 export const zPutVendorsByIdPointOfContactBody = zVendorPointOfContactModel;
 
@@ -65,3 +75,8 @@ export const zPutVendorsByIdPointOfContactPath = z.object({
 export const zGetVendorsByIdPath = z.object({
   id: z.uuid(),
 });
+
+/**
+ * OK
+ */
+export const zGetVendorsByIdResponse = zVendorModel;

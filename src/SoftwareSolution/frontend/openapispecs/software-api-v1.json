@@ -12,21 +12,27 @@
   "paths": {
     "/catalog": {
       "get": {
-        "tags": [
-          "GetAllCatalogItems"
-        ],
+        "tags": ["GetAllCatalogItems"],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CatalogItem"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/vendors/{vendorId}/catalog-items": {
       "post": {
-        "tags": [
-          "AddCatalogItem"
-        ],
+        "tags": ["AddCatalogItem"],
         "parameters": [
           {
             "name": "vendorId",
@@ -42,7 +48,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CatalogCreateModel"
+                "$ref": "#/components/schemas/CatalogCreateItem"
               }
             }
           },
@@ -54,7 +60,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CatalogCreateModel"
+                  "$ref": "#/components/schemas/CatalogItem"
                 }
               }
             }
@@ -72,9 +78,7 @@
         }
       },
       "get": {
-        "tags": [
-          "GetCatalogItemsByVendor"
-        ],
+        "tags": ["GetCatalogItemsByVendor"],
         "parameters": [
           {
             "name": "vendorId",
@@ -95,9 +99,7 @@
     },
     "/vendors/{vendorId}/catalog-items/{itemId}": {
       "delete": {
-        "tags": [
-          "DeprecateCatalogItem"
-        ],
+        "tags": ["DeprecateCatalogItem"],
         "parameters": [
           {
             "name": "vendorId",
@@ -127,24 +129,18 @@
     },
     "/vendors": {
       "post": {
-        "tags": [
-          "Vendor"
-        ],
+        "tags": ["Vendor"],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateVendorRequestModel"
+                "$ref": "#/components/schemas/CreateVendorModel"
               }
             },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateVendorRequestModel"
-              }
-            },
+
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateVendorRequestModel"
+                "$ref": "#/components/schemas/VendorModel"
               }
             }
           },
@@ -157,9 +153,7 @@
         }
       },
       "get": {
-        "tags": [
-          "Vendor"
-        ],
+        "tags": ["Vendor"],
         "responses": {
           "200": {
             "description": "OK",
@@ -168,7 +162,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/VendorDetailsModel"
+                    "$ref": "#/components/schemas/VendorModel"
                   }
                 }
               },
@@ -176,7 +170,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/VendorDetailsModel"
+                    "$ref": "#/components/schemas/VendorModel"
                   }
                 }
               },
@@ -184,7 +178,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/VendorDetailsModel"
+                    "$ref": "#/components/schemas/VendorModel"
                   }
                 }
               }
@@ -195,9 +189,7 @@
     },
     "/vendors/{id}/point-of-contact": {
       "put": {
-        "tags": [
-          "Vendor"
-        ],
+        "tags": ["Vendor"],
         "parameters": [
           {
             "name": "id",
@@ -238,9 +230,7 @@
     },
     "/vendors/{id}": {
       "get": {
-        "tags": [
-          "Vendor"
-        ],
+        "tags": ["Vendor"],
         "parameters": [
           {
             "name": "id",
@@ -254,7 +244,14 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VendorModel"
+                }
+              }
+            }
           }
         }
       }
@@ -262,10 +259,8 @@
   },
   "components": {
     "schemas": {
-      "CatalogCreateModel": {
-        "required": [
-          "name"
-        ],
+      "CatalogItem": {
+        "required": ["name"],
         "type": "object",
         "properties": {
           "id": {
@@ -286,12 +281,23 @@
           }
         }
       },
-      "CreateVendorRequestModel": {
-        "required": [
-          "name",
-          "url",
-          "pointOfContact"
-        ],
+      "CatalogCreateItem": {
+        "required": ["name", "vendorId"],
+        "type": "object",
+        "properties": {
+          "vendorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 5,
+            "type": "string"
+          }
+        }
+      },
+      "CreateVendorModel": {
+        "required": ["name", "url", "pointOfContact"],
         "type": "object",
         "properties": {
           "name": {
@@ -307,12 +313,8 @@
           }
         }
       },
-      "VendorDetailsModel": {
-        "required": [
-          "name",
-          "url",
-          "pointOfContact"
-        ],
+      "VendorModel": {
+        "required": ["name", "url", "pointOfContact"],
         "type": "object",
         "properties": {
           "id": {
@@ -335,11 +337,7 @@
         }
       },
       "VendorPointOfContactModel": {
-        "required": [
-          "name",
-          "email",
-          "phone"
-        ],
+        "required": ["name", "email", "phone"],
         "type": "object",
         "properties": {
           "name": {

@@ -1,9 +1,10 @@
-// Which scenario each endpoint is currently serving.
-//
-// Change a value here and reload — no application code changes. That is the
-// point: your app did not get worse, the server got honest.
+/**
+ * Active scenario selection for MSW handlers.
+ * This file is written by msw-lens — do not edit manually.
+ * Keys are "METHOD endpoint", values are scenario names defined in the handler.
+ */
 const activeScenarios: Record<string, string> = {
-
+  'GET /api/vendors': 'typical',
 };
 
 export default activeScenarios;

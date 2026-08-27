@@ -4,20 +4,25 @@ export interface ClientOptions {
   baseUrl: 'https://software-api/' | (string & {});
 }
 
-export interface CatalogCreateModel {
+export interface CatalogItem {
   id?: string;
   vendorId?: string;
   name: string;
   isDeprecated?: boolean;
 }
 
-export interface CreateVendorRequestModel {
+export interface CatalogCreateItem {
+  vendorId: string;
+  name: string;
+}
+
+export interface CreateVendorModel {
   name: string;
   url: string;
   pointOfContact: VendorPointOfContactModel;
 }
 
-export interface VendorDetailsModel {
+export interface VendorModel {
   id?: string;
   name: string;
   url: string;
@@ -42,8 +47,10 @@ export interface GetCatalogResponses {
   /**
    * OK
    */
-  200: unknown;
+  200: CatalogItem[];
 }
+
+export type GetCatalogResponse = GetCatalogResponses[keyof GetCatalogResponses];
 
 export interface GetVendorsByVendorIdCatalogItemsData {
   body?: never;
@@ -62,7 +69,7 @@ export interface GetVendorsByVendorIdCatalogItemsResponses {
 }
 
 export interface PostVendorsByVendorIdCatalogItemsData {
-  body: CatalogCreateModel;
+  body: CatalogCreateItem;
   path: {
     vendorId: string;
   };
@@ -84,7 +91,7 @@ export interface PostVendorsByVendorIdCatalogItemsResponses {
   /**
    * Created
    */
-  201: CatalogCreateModel;
+  201: CatalogItem;
 }
 
 export type PostVendorsByVendorIdCatalogItemsResponse =
@@ -118,13 +125,13 @@ export interface GetVendorsResponses {
   /**
    * OK
    */
-  200: VendorDetailsModel[];
+  200: VendorModel[];
 }
 
 export type GetVendorsResponse = GetVendorsResponses[keyof GetVendorsResponses];
 
 export interface PostVendorsData {
-  body: CreateVendorRequestModel;
+  body: CreateVendorModel;
   path?: never;
   query?: never;
   url: '/vendors';
@@ -166,5 +173,7 @@ export interface GetVendorsByIdResponses {
   /**
    * OK
    */
-  200: unknown;
+  200: VendorModel;
 }
+
+export type GetVendorsByIdResponse = GetVendorsByIdResponses[keyof GetVendorsByIdResponses];

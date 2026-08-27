@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet, RouterLinkActive } from '@angular/router';
 import { routes } from './app.routes';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   providers: [],
 
   template: `
@@ -14,7 +14,13 @@ import { routes } from './app.routes';
         <ul class="menu menu-horizontal px-1">
           @for (lab of features; track lab.path) {
             <li>
-              <a [routerLink]="lab.path">{{ lab.title }}</a>
+              <a
+                class="btn btn-sm"
+                [routerLink]="lab.path"
+                [routerLinkActive]="['btn-secondary']"
+                [routerLinkActiveOptions]="{ exact: true }"
+                >{{ lab.title }}</a
+              >
             </li>
           }
         </ul>

@@ -3,22 +3,30 @@ import { CatalogStore } from '../catalog-store';
 
 @Component({
   selector: 'app-catalog',
-  providers: [CatalogStore],
+  providers: [],
   imports: [],
   template: `
-    <p>Catalog Works</p>
+    <p>Software Catalog</p>
     <table class="table">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Vendor ID</th>
+          <th>Software Item</th>
+          <th>Vendor</th>
         </tr>
       </thead>
       <tbody>
         @for (item of store.catalogWithVendor(); track item.id) {
           <tr [class.opacity-50]="item.isDeprecated" [class.text-red-500]="item.isDeprecated">
             <td>{{ item.name }} {{ item.isDeprecated ? '(Deprecated)' : '' }}</td>
-            <td>{{ item.vendor?.name }}</td>
+            @if (item.vendor) {
+              <td>{{ item.vendor.name }}</td>
+            } @else {
+              @if (store.vendorResource.isLoading()) {
+                <td>Loading...</td>
+              } @else {
+                <td>N/A</td>
+              }
+            }
           </tr>
         }
       </tbody>
