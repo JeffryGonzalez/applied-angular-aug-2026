@@ -11,7 +11,8 @@
     "lens": "msw-lens",
     "lens:watch": "msw-lens --watch",
     "lens:context": "msw-lens --context",
-    "sync-package-json": "npx check-updates -u && npm install"
+    "sync-package-json:dry-run": "node scripts/sync-from-lock.mjs",
+    "sync-package-json:write": "node scripts/sync-from-lock.mjs -- --write"
   },
   "private": true,
   "packageManager": "npm@11.12.1",
